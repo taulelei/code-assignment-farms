@@ -1,0 +1,15 @@
+<div class="row" *ngIf="farm">
+    <div class="col-sm-6">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" [(ngModel)]="farm.Name"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="code">Code:</label>
+                <input type="text" class="form-control" id="code" [(ngModel)]="farm.Code"/>
+            </div>
+            <div class="form-group">
+                <a routerLink="/" class="button button-default">Back</a>
+            </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="row">
+    
+    <div class="col-sm-12">
+        <h1 class="">Farm List:</h1>
+    </div>
+    <div class="col-sm-12">
+        <button (click)="addFarm()">Add Farm</button>
+    </div>
+    <div class="col-sm-12">
+        <div>
+            <ul>
+                <li *ngFor='let farm of farmList'>
+                    <a routerLink="/farms/{{farm.Code}}">
+                        <span >{{farm.Name}} </span>
+                    </a>
+                    <b style="cursor: pointer;" (click)="removeFarm(farm)"> (Delete)</b>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
