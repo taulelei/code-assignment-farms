@@ -1,12 +1,32 @@
 <div class="row" *ngIf="farm">
-    <div class="col-sm-6">
+    <div class="col-md-12">
+        <h1 class="">Farm Details</h1>
+    </div>
+    <div class="col-md-6">
             <div class="form-group">
-                <label for="name">Name:</label>
+                <label class="label" for="code">Code:</label>
+                <!-- <input type="text" class="form-control" id="code" [(ngModel)]="farm.Code"/> -->
+                <p id="code">{{farm.Code}}</p>
+            </div>
+            <div class="form-group">
+                <label class="label" for="name">Name:</label>
                 <input type="text" class="form-control" id="name" [(ngModel)]="farm.Name"/>
             </div>
             <div class="form-group">
-                <label class="label" for="code">Code:</label>
-                <input type="text" class="form-control" id="code" [(ngModel)]="farm.Code"/>
+                <label class="label" for="type">Type:</label>
+                <input type="text" class="form-control" id="type" [(ngModel)]="farm.FarmType"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="harvested">Harvested:</label>
+                <input type="text" class="form-control" id="harvested" [(ngModel)]="farm.DateTimeHarvested"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="miller">Miller:</label>
+                <input type="text" class="form-control" id="miller" [(ngModel)]="farm.Miller.Name"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="paddocks">Paddocks:</label>
+                <input type="text" class="form-control" id="paddocks" [(ngModel)]="farm.Paddocks.length"/>
             </div>
             <div class="form-group">
                 <a routerLink="/" class="button button-default">Back</a>

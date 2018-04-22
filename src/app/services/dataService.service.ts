@@ -48,7 +48,7 @@ export class DataService implements IDataService{
 
     private generateData(){
         this.farms = this.generateFarms();
-        this.millers = this.generateMillers();
+        //this.millers = this.generateMillers();
     }
 
     private generateFarms(): Farm[]{
@@ -56,20 +56,23 @@ export class DataService implements IDataService{
         for(var i = 0; i < 100; i++){
             farms.push(new Farm());
         }
+        this.generateMillers(farms);
         return farms;
     }
 
-    private generateMillers(): Miller[]{
+    private generateMillers(farms): Miller[]{
         var millerList = [];
-        var availFarms = this.farms.map(x => Object.assign({}, x));
+        var availFarms = farms.map(x => Object.assign({}, x));
 
         while(availFarms.length > 0){
             var miller = new Miller();
-            var noFarms = Math.floor(Math.random()*8) + 1;
-
+            var noFarms = Math.floor(Math.random()*4) + 1;
+            if(noFarms > availFarms.length)
+                noFarms = availFarms.length;
             for(var j = 0; j < noFarms; j++){
                 var randFarm = Math.floor(Math.random()*availFarms.length);
-                this.farms[randFarm].Miller = miller;
+                //availFarms[randFarm].Miller = miller;
+                farms.find(x => x.Code == availFarms[randFarm].Code).Miller = miller;
                 miller.Farms.push(availFarms[randFarm]);
                 availFarms.splice(randFarm, 1);
             }
@@ -94,7 +97,7 @@ export class Farm{
     private farmTypes: string[] = ['Cane', 'Rice', 'Wheat', 'Vegetable'];
 
     Code: string = faker.random.uuid();
-    Name: string = faker.random.word();
+    Name: string = faker.address.city() + " Farm";
     DateTimeHarvested: Date = faker.date.past();
     FarmType: string = this.farmTypes[Math.floor(Math.random()*this.farmTypes.length)];
     Miller: Miller;

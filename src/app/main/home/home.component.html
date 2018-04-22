@@ -1,21 +1,76 @@
 <div class="row">
-    
     <div class="col-sm-12">
         <h1 class="">Farm List:</h1>
     </div>
+    <!-- <div class="col-sm-12">
+        <button class="btn btn-default" (click)="addFarm()">Add Farm</button>
+    </div> -->
+    <hr>
     <div class="col-sm-12">
-        <button (click)="addFarm()">Add Farm</button>
+        <!-- <div class="row">
+            <div class="col-sm-4">
+                <input type="text" class="form-control" placeholder="Farm name..." [(ngModel)]="filter.farm">
+            </div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" placeholder="Miller name..." [(ngModel)]="filter.miller">
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-default" (click)="filterFarms(filter.farm, filter.miller)">Search</button>
+            </div>
+        </div> -->
+        <form class="form-inline" (ngSubmit)="filterFarms(filter.farm, filter.miller)">
+            <div class="form-group" style="margin-right: 1em;">
+                <input type="text" class="form-control" placeholder="Farm name..." [(ngModel)]="filter.farm" name="farm_name_filter_input">
+            </div>
+            <div class="form-group" style="margin-right: 1em;">
+                <input type="text" class="form-control" placeholder="Miller name..." [(ngModel)]="filter.miller" name="miller_name_filter_input">
+            </div>
+            <div class="form-group" style="margin-right: 1em;">
+                <button class="btn btn-default" type="submit">Search</button>
+            </div>
+            <div class="form-group" style="margin-right: 1em;">
+                <button class="btn btn-default" type="button" (click)="filter.farm = ''; filter.miller = ''; filterFarms(filter.farm, filter.miller)">Reset</button>
+            </div>
+        </form>
+        <hr>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Farm Name</th>
+                    <th>Type</th>
+                    <th>Miller</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <td><input class="form-control"/></td>
+                    <td><input class="form-control"/></td>
+                    <td><input class="form-control"/></td>
+                </tr> -->
+                <tr *ngFor='let farm of tablePagination.data.slice((tablePagination.pageNumber - 1) * tablePagination.resultsPerPage, tablePagination.pageNumber * tablePagination.resultsPerPage)' 
+                routerLink="/farms/{{farm.Code}}" style="cursor: pointer;">
+                    <td>{{farm.Name}}</td>
+                    <td>{{farm.FarmType}}</td>
+                    <td>{{farm.Miller.Name}}</td>
+                    <td (click)="removeFarm(farm)">Delete</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <div class="col-sm-12">
-        <div>
-            <ul>
-                <li *ngFor='let farm of farmList'>
-                    <a routerLink="/farms/{{farm.Code}}">
-                        <span >{{farm.Name}} </span>
-                    </a>
-                    <b style="cursor: pointer;" (click)="removeFarm(farm)"> (Delete)</b>
-                </li>
-            </ul>
+        <div class="btn-group">
+            <button class="btn btn-default" [disabled]="tablePagination.pageNumber === 1" (click)="tablePagination.pageNumber = 1">&laquo;</button>
+            <button class="btn btn-default" [disabled]="tablePagination.pageNumber === 1" (click)="tablePagination.pageNumber = tablePagination.pageNumber === 1 ? 1 : tablePagination.pageNumber - 1"><</button>
+            <button class="btn btn-default">{{tablePagination.pageNumber}}</button>
+            <button class="btn btn-default" [disabled]="tablePagination.pageNumber >= (tablePagination.data.length / tablePagination.resultsPerPage)" (click)="tablePagination.pageNumber = tablePagination.pageNumber >= (tablePagination.data.length / tablePagination.resultsPerPage) ? tablePagination.Math.ceil(tablePagination.data.length / tablePagination.resultsPerPage) : tablePagination.pageNumber + 1">></button>
+            <button class="btn btn-default" [disabled]="tablePagination.pageNumber >= (tablePagination.data.length / tablePagination.resultsPerPage)" (click)="tablePagination.pageNumber = tablePagination.Math.ceil(tablePagination.data.length / tablePagination.resultsPerPage)">&raquo;</button>
+            <select class="form-control" [(ngModel)]="tablePagination.resultsPerPage" id="pagination-count" name="pagination-count" style="width: auto;" >
+                <option>5</option>
+                <option>10</option>
+                <option>20</option>
+            </select>
         </div>
+        
     </div>
 </div>
