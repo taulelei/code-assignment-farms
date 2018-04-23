@@ -11,6 +11,18 @@
     color: blue;
     text-decoration: underline;
 }
+.as-link:hover{
+    color: lightskyblue;
+}
+
+.as-warning-link{
+    cursor: pointer;
+    color: red;
+    text-decoration: underline;
+}
+.as-warning-link:hover{
+    color: lightcoral;
+}
 
 .clickable{
     cursor: pointer;

@@ -42,6 +42,7 @@ export class HomeComponent implements OnInit {
 
     filterFarms(){
         this.tablePagination.data = this.farmList.filter(x => x.Name.includes(this.filter.farm) && x.Miller.Name.includes(this.filter.miller));
+        this.tablePagination.pageNumber = 1;
     }
 
     addFarm(){
@@ -62,6 +63,13 @@ export class HomeComponent implements OnInit {
         var code = this.farmList.indexOf(farm);
         //var code = farm.Code;
         this.router.navigate(['farms/' + code]);
+    }
+
+    viewMillerDetails(miller: Miller){
+        this.dataService.getAllMillers().then((response) => {
+            let code = response.indexOf(miller);
+            this.router.navigate(['miller/' + code]);
+        });
     }
 
     ngOnInit():void {}

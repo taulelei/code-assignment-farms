@@ -9,19 +9,19 @@
     <div class="col-sm-12">
         <div class="row">
             <div class="col-sm-4 gutter-1">
-                <input type="text" class="form-control" placeholder="Farm name..." [(ngModel)]="filter.farm" name="farm_name_filter_input">
+                <input type="text" class="form-control" placeholder="Farm name..." [(ngModel)]="filter.farm" (ngModelChange)="filterFarms()" name="farm_name_filter_input">
             </div>
             <div class="col-sm-4 gutter-1">
-                <select class="form-control" [(ngModel)]="filter.miller" name="miller_name_filter_input">
+                <select class="form-control" [(ngModel)]="filter.miller" (change)="filterFarms()" name="miller_name_filter_input">
                     <option value="" selected>Miller name...</option>
                     <option *ngFor="let miller of millerList" [ngValue]="miller.Name">{{miller.Name}}</option>
                 </select>
             </div>
+            <!-- <div class="col-sm-2 gutter-1">
+                <button class="btn btn-primary clickable fill-width" type="button" (click)="filterFarms()">Search</button>
+            </div> -->
             <div class="col-sm-2 gutter-1">
-                <button class="btn btn-primary clickable fill-width" type="button" (click)="filterFarms(filter.farm, filter.miller)">Search</button>
-            </div>
-            <div class="col-sm-2 gutter-1">
-                <button class="btn btn-default clickable fill-width" type="button" (click)="filter.farm = ''; filter.miller = ''; filterFarms(filter.farm, filter.miller)">Reset</button>
+                <button class="btn btn-default clickable fill-width" type="button" (click)="filter.farm = ''; filter.miller = ''; filterFarms()">Reset</button>
             </div>
         </div>
     </div>
@@ -43,8 +43,8 @@
                 (click)="viewDetails(farm)" class="clickable">
                     <td>{{farm.Name}}</td>
                     <td>{{farm.FarmType}}</td>
-                    <td>{{farm.Miller.Name}}</td>
-                    <td (click)="removeFarm(farm)">Delete</td>
+                    <td class="as-link" (click)="viewMillerDetails(farm.Miller)"><span >{{farm.Miller.Name}}</span></td>
+                    <td class="as-warning-link" (click)="removeFarm(farm)"><span >Delete</span></td>
                 </tr>
             </tbody>
         </table>

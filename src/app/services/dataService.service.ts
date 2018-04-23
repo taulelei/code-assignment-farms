@@ -5,7 +5,7 @@ import * as faker from 'faker';
 export interface IDataService{
     getAllFarms(): Promise<Farm[]>;
     addFarm(farm: Farm): Promise<Farm[]>;
-    getFarmInfo(code: number): Promise<Farm>;
+    getFarmInfo(index: number): Promise<Farm>;
     editFarm(index: number, farm: Farm): Promise<number>;
     removeFarm(farm: Farm): Promise<Farm[]>;
 
@@ -28,9 +28,9 @@ export class DataService implements IDataService{
         });
     }
 
-    getFarmInfo(code: number){
+    getFarmInfo(index: number){
         return new Promise<Farm>((resolve, reject) => {
-            resolve(this.farms[code]);
+            resolve(this.farms[index]);
         });
     }
 
@@ -42,7 +42,26 @@ export class DataService implements IDataService{
     }
 
     editFarm(index: number, farm: Farm){
-        this.farms[index] = farm;
+        var existingFarm = this.farms.find(x => x.Id == farm.Id);
+        existingFarm.Code = farm.Code;
+        existingFarm.Name = farm.Name;
+        existingFarm.DateTimeHarvested = farm.DateTimeHarvested;
+        existingFarm.FarmType = farm.FarmType;
+        existingFarm.Paddocks = farm.Paddocks;
+
+        var existingMiller = this.millers.find(x => x == existingFarm.Miller);
+        //var millerFarmIndex = existingMiller.Farms.indexOf(existingFarm);
+        existingMiller.Farms.forEach(function(item, index, object){
+            if(item.Id == existingFarm.Id){
+                object.splice(index, 1);
+            }
+        });
+
+        //existingMiller.Farms.splice(millerFarmIndex, 1);
+
+        var newMiller = this.millers.find(x => x.Id == farm.Miller.Id);
+        newMiller.Farms.push(existingFarm);
+        existingFarm.Miller = newMiller;
         return new Promise<number>((resolve, reject) => {
             resolve(index);
         });
@@ -68,6 +87,7 @@ export class DataService implements IDataService{
         });
     }
 
+    // Seeding functions
     private generateData(){
         this.farms = this.generateFarms();
     }
@@ -104,6 +124,8 @@ export class DataService implements IDataService{
 
 // Models
 export class Miller{
+    Id: string = faker.random.uuid();
+
     Name: string = faker.name.findName();
     Address: string = faker.address.streetAddress();
     Farms: Farm[] = [];
@@ -114,6 +136,8 @@ export class Miller{
 
 export class Farm{
     farmTypes: string[] = ['Cane', 'Rice', 'Wheat', 'Vegetable'];
+
+    Id: string = faker.random.uuid();
 
     Code: string = faker.random.uuid();
     Name: string = faker.address.city() + " Farm";
@@ -136,8 +160,10 @@ export class Farm{
 }
 
 export class Paddock{
+    Id: string = faker.random.uuid();
+    
     Code: string = faker.random.uuid();
-    Area: number = faker.random.number({min: 0.10, max: 2.00});
+    Area: number = faker.random.number({min: 1, max: 4});
     OwnerFarm: Farm;
     constructor(parentFarm: Farm){
         this.OwnerFarm = parentFarm;
