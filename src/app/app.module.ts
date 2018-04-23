@@ -9,6 +9,7 @@ import {MainModule} from './main/main.module';
 import {DataService} from './services/dataService.service';
 
 import { AppComponent } from './app.component';
+import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 
 @NgModule({
@@ -19,6 +20,7 @@ import { MainComponent } from './main/main.component';
   ],
   declarations: [
     AppComponent,
+    HeaderComponent,
     MainComponent
   ],
   providers: [

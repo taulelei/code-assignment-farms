@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+.gutter-1{
+    margin-bottom: 1em;
+}
+
+.margin-right-1{
+    margin-right: 1em;
+}
+
+.as-link{
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.clickable{
+    cursor: pointer;
+}
+
+.fill-width{
+    width: 100%;
+}

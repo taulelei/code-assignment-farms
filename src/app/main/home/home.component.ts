@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { DataService, Farm } from '../../services/dataService.service';
+import { DataService, Farm, Miller } from '../../services/dataService.service';
 
 @Component({
     selector: 'home-view',
@@ -11,6 +11,7 @@ import { DataService, Farm } from '../../services/dataService.service';
 export class HomeComponent implements OnInit {   
 
     farmList: Farm[];
+    millerList: Miller[];
     
     tablePagination = {
         data: [],
@@ -20,8 +21,7 @@ export class HomeComponent implements OnInit {
     }
     filter = {
         farm: "",
-        miller: "",
-        filteredData: []
+        miller: ""
     }
 
     constructor(
@@ -34,10 +34,14 @@ export class HomeComponent implements OnInit {
             this.farmList = response;
             this.tablePagination.data = response;
         });
+
+        this.dataService.getAllMillers().then((response) => {
+            this.millerList = response;
+        })
     }
 
-    filterFarms(farmName: string, millerName: string){
-        this.tablePagination.data = this.farmList.filter(x => x.Name.includes(farmName) && x.Miller.Name.includes(millerName));
+    filterFarms(){
+        this.tablePagination.data = this.farmList.filter(x => x.Name.includes(this.filter.farm) && x.Miller.Name.includes(this.filter.miller));
     }
 
     addFarm(){
@@ -55,23 +59,10 @@ export class HomeComponent implements OnInit {
     }
 
     viewDetails(farm: Farm){
-        //var index = this.farmList.indexOf(farm);
-        var code = farm.Code;
-        this.router.navigate(['farm-details', { code }]);
+        var code = this.farmList.indexOf(farm);
+        //var code = farm.Code;
+        this.router.navigate(['farms/' + code]);
     }
 
     ngOnInit():void {}
 }
-
-// interface TablePagination {
-//     data: Farm[],
-//     pageNumber: number,
-//     resultsPerPage: number,
-//     Math: Math
-// }
-
-// interface Filter {
-//     farm: string,
-//     miller: string,
-//     filteredData: Farm[]
-// }

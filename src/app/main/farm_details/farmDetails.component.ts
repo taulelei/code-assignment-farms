@@ -12,21 +12,29 @@ export class FarmDetailsComponent implements OnInit {
     private sub: any;
 
     farm: Farm;
-    farmCode: string;
+    farmCode: number;
 
     constructor(
         private dataService: DataService,
+        private router: Router,
         private route: ActivatedRoute
     ){
         
+    }
+
+    viewMillerDetails(){
+        this.dataService.getAllMillers().then((response) => {
+            let code = response.indexOf(this.farm.Miller);
+            this.router.navigate(['miller/' + code]);
+        });
     }
 
     ngOnInit():void {
 
         this.sub = this.route.params.subscribe(params => {
             if(params['code'] !== undefined){
-                let farmCode = params['code'];
-                this.dataService.getFarmInfo(farmCode).then((response) => {
+                this.farmCode = params['code'];
+                this.dataService.getFarmInfo(this.farmCode).then((response) => {
                     this.farm = response;
                 });
             }

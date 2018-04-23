@@ -5,9 +5,12 @@ import * as faker from 'faker';
 export interface IDataService{
     getAllFarms(): Promise<Farm[]>;
     addFarm(farm: Farm): Promise<Farm[]>;
-    getFarmInfo(code: string): Promise<Farm>;
-    // editFarm(farm: Farm[]);
+    getFarmInfo(code: number): Promise<Farm>;
+    editFarm(index: number, farm: Farm): Promise<number>;
     removeFarm(farm: Farm): Promise<Farm[]>;
+
+    getAllMillers(): Promise<Miller[]>;
+    getMillerInfo(index: number): Promise<Miller>;
 }
 
 @Injectable()
@@ -25,9 +28,9 @@ export class DataService implements IDataService{
         });
     }
 
-    getFarmInfo(code: string){
+    getFarmInfo(code: number){
         return new Promise<Farm>((resolve, reject) => {
-            resolve(this.farms.find(x => x.Code == code));
+            resolve(this.farms[code]);
         });
     }
 
@@ -35,6 +38,13 @@ export class DataService implements IDataService{
         this.farms.push(farm)
         return new Promise<Farm[]>((resolve, reject) => {
             resolve(this.farms);
+        });
+    }
+
+    editFarm(index: number, farm: Farm){
+        this.farms[index] = farm;
+        return new Promise<number>((resolve, reject) => {
+            resolve(index);
         });
     }
 
@@ -46,9 +56,20 @@ export class DataService implements IDataService{
         });
     }
 
+    getAllMillers(){
+        return new Promise<Miller[]>((resolve, reject) => {
+            resolve(this.millers);
+        });
+    }
+
+    getMillerInfo(index: number){
+        return new Promise<Miller>((resolve, reject) => {
+            resolve(this.millers[index]);
+        });
+    }
+
     private generateData(){
         this.farms = this.generateFarms();
-        //this.millers = this.generateMillers();
     }
 
     private generateFarms(): Farm[]{
@@ -56,7 +77,7 @@ export class DataService implements IDataService{
         for(var i = 0; i < 100; i++){
             farms.push(new Farm());
         }
-        this.generateMillers(farms);
+        this.millers = this.generateMillers(farms);
         return farms;
     }
 
@@ -71,14 +92,12 @@ export class DataService implements IDataService{
                 noFarms = availFarms.length;
             for(var j = 0; j < noFarms; j++){
                 var randFarm = Math.floor(Math.random()*availFarms.length);
-                //availFarms[randFarm].Miller = miller;
                 farms.find(x => x.Code == availFarms[randFarm].Code).Miller = miller;
                 miller.Farms.push(availFarms[randFarm]);
                 availFarms.splice(randFarm, 1);
             }
             millerList.push(miller);
         }
-        // alert(availFarms.length + " farms with no miller.");
         return millerList;
     }
 }
@@ -94,7 +113,7 @@ export class Miller{
 }
 
 export class Farm{
-    private farmTypes: string[] = ['Cane', 'Rice', 'Wheat', 'Vegetable'];
+    farmTypes: string[] = ['Cane', 'Rice', 'Wheat', 'Vegetable'];
 
     Code: string = faker.random.uuid();
     Name: string = faker.address.city() + " Farm";
@@ -108,11 +127,17 @@ export class Farm{
             this.Paddocks.push(new Paddock(this));
         }
     }
+
+    getPaddockArea(){
+        let totalArea = 0;
+        this.Paddocks.forEach(x => totalArea += x.Area);
+        return totalArea;
+    }
 }
 
 export class Paddock{
     Code: string = faker.random.uuid();
-    Area: number = faker.random.number({min: 7, max: 20});
+    Area: number = faker.random.number({min: 0.10, max: 2.00});
     OwnerFarm: Farm;
     constructor(parentFarm: Farm){
         this.OwnerFarm = parentFarm;
