@@ -4,9 +4,9 @@ import * as faker from 'faker';
 
 export interface IDataService{
     getAllFarms(): Promise<Farm[]>;
-    addFarm(farm: Farm): Promise<Farm[]>;
+    addFarm(farm: Farm): Promise<number>;
     getFarmInfo(index: number): Promise<Farm>;
-    editFarm(index: number, farm: Farm): Promise<number>;
+    editFarm(newFarm: Farm, existingFarm: Farm): Promise<number>;
     removeFarm(farm: Farm): Promise<Farm[]>;
 
     getAllMillers(): Promise<Miller[]>;
@@ -36,39 +36,36 @@ export class DataService implements IDataService{
 
     addFarm(farm: Farm){
         this.farms.push(farm)
-        return new Promise<Farm[]>((resolve, reject) => {
-            resolve(this.farms);
+        return new Promise<number>((resolve, reject) => {
+            resolve(this.farms.indexOf(farm));
         });
     }
 
-    editFarm(index: number, farm: Farm){
-        var existingFarm = this.farms.find(x => x.Id == farm.Id);
-        existingFarm.Code = farm.Code;
-        existingFarm.Name = farm.Name;
-        existingFarm.DateTimeHarvested = farm.DateTimeHarvested;
-        existingFarm.FarmType = farm.FarmType;
-        existingFarm.Paddocks = farm.Paddocks;
+    editFarm(newFarm: Farm, existingFarm: Farm){
+        //let existingFarm = this.farms.find(x => x.Id == farm.Id);
+        existingFarm.Code = newFarm.Code;
+        existingFarm.Name = newFarm.Name;
+        existingFarm.DateTimeHarvested = newFarm.DateTimeHarvested;
+        existingFarm.FarmType = newFarm.FarmType;
+        existingFarm.Paddocks = newFarm.Paddocks;
+        if(existingFarm.Miller !== undefined && existingFarm.Miller !== null){
+            existingFarm.Miller.Farms.forEach(function(item, index, object){
+                if(item.Id == existingFarm.Id){
+                    object.splice(index, 1);
+                }
+            });
+        }
 
-        var existingMiller = this.millers.find(x => x == existingFarm.Miller);
-        //var millerFarmIndex = existingMiller.Farms.indexOf(existingFarm);
-        existingMiller.Farms.forEach(function(item, index, object){
-            if(item.Id == existingFarm.Id){
-                object.splice(index, 1);
-            }
-        });
-
-        //existingMiller.Farms.splice(millerFarmIndex, 1);
-
-        var newMiller = this.millers.find(x => x.Id == farm.Miller.Id);
+        let newMiller = this.millers.find(x => x.Id == newFarm.Miller.Id);
         newMiller.Farms.push(existingFarm);
         existingFarm.Miller = newMiller;
         return new Promise<number>((resolve, reject) => {
-            resolve(index);
+            resolve(this.farms.indexOf(existingFarm));
         });
     }
 
     removeFarm(farm: Farm){
-        var farmIndex = this.farms.indexOf(farm);
+        let farmIndex = this.farms.indexOf(farm);
         this.farms.splice(farmIndex, 1);
         return new Promise<Farm[]>((resolve, reject) => {
             resolve(this.farms);
@@ -93,25 +90,27 @@ export class DataService implements IDataService{
     }
 
     private generateFarms(): Farm[]{
-        var farms = [];
-        for(var i = 0; i < 100; i++){
-            farms.push(new Farm());
+        let farms = [];
+        for(let i = 0; i < 100; i++){
+            let newFarm = new Farm();
+            newFarm.initRandomFarm();
+            newFarm.initPaddocks(newFarm);
+            farms.push(newFarm);
         }
         this.millers = this.generateMillers(farms);
         return farms;
     }
 
     private generateMillers(farms): Miller[]{
-        var millerList = [];
-        var availFarms = farms.map(x => Object.assign({}, x));
+        let millerList = [];
+        let availFarms = farms.map(x => Object.assign({}, x));
 
         while(availFarms.length > 0){
-            var miller = new Miller();
-            var noFarms = Math.floor(Math.random()*4) + 1;
-            if(noFarms > availFarms.length)
-                noFarms = availFarms.length;
-            for(var j = 0; j < noFarms; j++){
-                var randFarm = Math.floor(Math.random()*availFarms.length);
+            let miller = new Miller();
+            miller.initRandomMiller();
+            let noFarms = availFarms.length < 4 ? availFarms.length : Math.floor(Math.random()*4)+1;
+            for(let j = 0; j < noFarms; j++){
+                let randFarm = Math.floor(Math.random()*availFarms.length);
                 farms.find(x => x.Code == availFarms[randFarm].Code).Miller = miller;
                 miller.Farms.push(availFarms[randFarm]);
                 availFarms.splice(randFarm, 1);
@@ -126,11 +125,16 @@ export class DataService implements IDataService{
 export class Miller{
     Id: string = faker.random.uuid();
 
-    Name: string = faker.name.findName();
-    Address: string = faker.address.streetAddress();
-    Farms: Farm[] = [];
+    Name: string;
+    Address: string;
+    Farms: Farm[] = new Array<Farm>();
 
     constructor(){
+    }
+
+    initRandomMiller(){
+        this.Name = faker.name.findName();
+        this.Address = faker.address.streetAddress();
     }
 }
 
@@ -139,16 +143,29 @@ export class Farm{
 
     Id: string = faker.random.uuid();
 
-    Code: string = faker.random.uuid();
-    Name: string = faker.address.city() + " Farm";
-    DateTimeHarvested: Date = faker.date.past();
-    FarmType: string = this.farmTypes[Math.floor(Math.random()*this.farmTypes.length)];
+    Code: string;
+    Name: string;
+    DateTimeHarvested: Date;
+    FarmType: string;
     Miller: Miller;
-    Paddocks: Paddock[] = [];
+    Paddocks: Paddock[] = new Array<Paddock>();
 
     constructor(){
-        for(var i = 0; i < 20; i++){
-            this.Paddocks.push(new Paddock(this));
+    }
+
+    initRandomFarm(){
+        this.Code = faker.random.uuid();
+        this.Name = faker.address.city() + " Farm";
+        this.DateTimeHarvested = faker.date.past();
+        this.FarmType = this.farmTypes[Math.floor(Math.random()*this.farmTypes.length)];
+    }
+
+    initPaddocks(farm: Farm){
+        for(let i = 0; i < 20; i++){
+            let newPaddock = new Paddock();
+            newPaddock.initRandomPaddock();
+            newPaddock.setOwnerFarm(farm);
+            this.Paddocks.push(newPaddock);
         }
     }
 
@@ -157,15 +174,36 @@ export class Farm{
         this.Paddocks.forEach(x => totalArea += x.Area);
         return totalArea;
     }
+
+    removePaddock(paddock: Paddock){
+        let index = this.Paddocks.findIndex(x => x.Id == paddock.Id);
+        this.Paddocks.splice(index, 1);
+    }
 }
 
 export class Paddock{
     Id: string = faker.random.uuid();
     
-    Code: string = faker.random.uuid();
-    Area: number = faker.random.number({min: 1, max: 4});
+    Code: string;
+    Area: number;
     OwnerFarm: Farm;
-    constructor(parentFarm: Farm){
-        this.OwnerFarm = parentFarm;
+    constructor(){
+    }
+
+    initRandomPaddock(){
+        this.Code = faker.random.uuid();
+        this.Area = faker.random.number({min: 1, max: 4});
+    }
+
+    setOwnerFarm(farm: Farm){
+        this.OwnerFarm = farm;
+    }
+
+    isValid(){
+        if(this.Code === undefined || this.Code === null || this.Code.length < 1)
+            return false;
+        if(this.Area === undefined || this.Area === null || this.Area < 1)
+            return false;
+        return true;
     }
 }

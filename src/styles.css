@@ -31,3 +31,9 @@
 .fill-width{
     width: 100%;
 }
+
+.form-field-warning{
+    color: red;
+    font-size: x-small;
+    font-style: italic;
+}

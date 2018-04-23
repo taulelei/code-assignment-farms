@@ -23,6 +23,9 @@
             <div class="col-sm-2 gutter-1">
                 <button class="btn btn-default clickable fill-width" type="button" (click)="filter.farm = ''; filter.miller = ''; filterFarms()">Reset</button>
             </div>
+            <div class="col-sm-2 gutter-1">
+                <button routerLink="/add-farm" class="btn btn-success clickable fill-width" type="button">Add Farm</button>
+            </div>
         </div>
     </div>
     <div class="col-sm-12">
@@ -56,7 +59,7 @@
             <button class="btn btn-default">{{tablePagination.pageNumber}}</button>
             <button class="btn btn-default" [disabled]="tablePagination.pageNumber >= (tablePagination.data.length / tablePagination.resultsPerPage)" (click)="tablePagination.pageNumber = tablePagination.pageNumber >= (tablePagination.data.length / tablePagination.resultsPerPage) ? tablePagination.Math.ceil(tablePagination.data.length / tablePagination.resultsPerPage) : tablePagination.pageNumber + 1">></button>
             <button class="btn btn-default" [disabled]="tablePagination.pageNumber >= (tablePagination.data.length / tablePagination.resultsPerPage)" (click)="tablePagination.pageNumber = tablePagination.Math.ceil(tablePagination.data.length / tablePagination.resultsPerPage)">&raquo;</button>
-            <select class="form-control" [(ngModel)]="tablePagination.resultsPerPage" id="pagination-count" name="pagination-count" >
+            <select class="form-control" [(ngModel)]="tablePagination.resultsPerPage" (change)="tablePagination.pageNumber = 1" id="pagination-count" name="pagination-count" >
                 <option>5</option>
                 <option>10</option>
                 <option>20</option>

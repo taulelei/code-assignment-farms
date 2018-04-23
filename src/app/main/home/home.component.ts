@@ -45,13 +45,13 @@ export class HomeComponent implements OnInit {
         this.tablePagination.pageNumber = 1;
     }
 
-    addFarm(){
-        var newFarm = new Farm();
-        this.dataService.addFarm(newFarm).then((response) => {
-            this.farmList = response;
-        });
+    // addFarm(){
+    //     var newFarm = new Farm();
+    //     this.dataService.addFarm(newFarm).then((response) => {
+    //         this.farmList = response;
+    //     });
         
-    }
+    // }
 
     removeFarm(farm){
         this.dataService.removeFarm(farm).then((response) => {

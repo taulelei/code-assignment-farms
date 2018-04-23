@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { HomeComponent } from './home/home.component';
 import { FarmDetailsComponent } from './farm_details/farmDetails.component';
+import { FarmAddComponent } from './farm_add/farmAdd.component';
 import { FarmDetailsEditComponent } from './farm_details_edit/farmDetailsEdit.component';
 import { RouterModule } from '@angular/router';
 import { MillerDetailsComponent } from './miller_details/millerDetails.component';
@@ -17,6 +18,7 @@ import { MillerDetailsComponent } from './miller_details/millerDetails.component
     declarations: [
         HomeComponent,
         FarmDetailsComponent,
+        FarmAddComponent,
         FarmDetailsEditComponent,
         MillerDetailsComponent
     ],

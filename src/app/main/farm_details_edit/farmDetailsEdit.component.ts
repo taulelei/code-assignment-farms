@@ -16,6 +16,8 @@ export class FarmDetailsEditComponent implements OnInit {
 
     editFarm: Farm;
 
+    newPaddock: Paddock = new Paddock();
+
     millerList: Miller[];
     paddockList: Paddock[];
 
@@ -28,25 +30,23 @@ export class FarmDetailsEditComponent implements OnInit {
     }
 
     addPaddock(newCode: string, newArea: number){
-        let newPaddock = new Paddock(this.farm);
-        if(newCode !== undefined && newCode.length > 0)
-            newPaddock.Code = newCode;
-        if(newArea > 0)
-            newPaddock.Area = newArea;
-        this.paddockList.unshift(newPaddock);
-        newCode = undefined;
-        newArea = undefined;
+        if(this.newPaddock.isValid()){
+            this.paddockList.unshift(this.newPaddock);
+            this.newPaddock = new Paddock();
+        }
     }
 
     removePaddock(index: number){
         this.paddockList.splice(index, 1);
     }
 
-    saveEdit(){
-        this.editFarm.Paddocks = this.paddockList;
-        this.dataService.editFarm(this.farmCode, this.editFarm).then((response) => {
-            //this.router.navigate(['farms/' + response]);
-        });
+    saveEdit(form: any){
+        if(form.valid){
+            this.editFarm.Paddocks = this.paddockList;
+            this.dataService.editFarm(this.editFarm, this.farm).then((response) => {
+                this.router.navigate(['farms/' + response]);
+            });
+        }
     }
 
     ngOnInit():void {

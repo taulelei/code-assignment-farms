@@ -5,13 +5,15 @@
 </div>
 <hr>
 <div class="row" *ngIf="farm">
-    <div class="col-sm-2 gutter-1">
+    <!-- <div class="col-sm-2 gutter-1">
         <button routerLink="/" class="btn btn-default clickable fill-width">Home</button>
     </div>
     <div class="col-sm-2 gutter-1">
         <button routerLink="/farms/edit/{{farmCode}}" class="btn btn-primary clickable fill-width">Edit</button>
-    </div>
+    </div> -->
     <div class="col-sm-12">
+        <button routerLink="/" class="btn btn-default clickable gutter-1">Home</button>
+        <button routerLink="/farms/edit/{{farmCode}}" class="btn btn-primary clickable gutter-1">Edit</button>
         <div>
             <strong>Code:</strong>
             <span>{{farm.Code}}</span>
@@ -30,7 +32,7 @@
         </div>
         <div>
             <strong>Miller:</strong>
-            <span class="as-link" (click)="viewMillerDetails()">{{farm.Miller.Name}}</span>
+            <span class="as-link" (click)="viewMillerDetails()" *ngIf="farm.Miller">{{farm.Miller.Name}}</span>
         </div>
         <div>
             <strong>Total Area:</strong>

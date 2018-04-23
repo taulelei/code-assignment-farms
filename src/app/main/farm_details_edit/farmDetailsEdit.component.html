@@ -5,39 +5,47 @@
 </div>
 <hr>
 <div class="row" *ngIf="farm">
-    <div class="col-sm-2 gutter-1">
+    <!-- <div class="col-sm-2 gutter-1">
         <button routerLink="/farms/{{farmCode}}" class="btn btn-danger clickable fill-width">Cancel</button>
     </div>
     <div class="col-sm-2 gutter-1">
-        <button routerLink="/farms/{{farmCode}}" (click)="saveEdit()" class="btn btn-success clickable fill-width">Save</button>
-    </div>
+        <button (click)="saveEdit()" class="btn btn-success clickable fill-width" >Save</button>
+    </div> -->
     <div class="col-sm-12">
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">
-                    <strong>Code:</strong>
-                    <input class="form-control" id="code" [(ngModel)]="editFarm.Code">
-                </div>
-                <div class="form-group">
-                    <strong>Name:</strong>
-                    <input class="form-control" id="name" [(ngModel)]="editFarm.Name">
-                </div>
-                <div class="form-group">
-                    <strong>Type:</strong>
-                    <select class="form-control" [(ngModel)]="editFarm.FarmType">
-                        <option *ngFor="let type of editFarm.farmTypes" [ngValue]="type">{{type}}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <strong>Harvested:</strong>
-                    <input class="form-control" id="harvested" [(ngModel)]="editFarm.DateTimeHarvested">
-                </div>
-                <div class="form-group">
-                    <strong>Miller:</strong>
-                    <select class="form-control" [(ngModel)]="editFarm.Miller">
-                        <option *ngFor="let miller of millerList" [ngValue]="miller">{{miller.Name}}</option>
-                    </select>
-                </div>
+                <form (ngSubmit)="saveEdit(farmEditForm)" (ngForm)="farmEditForm" #farmEditForm="ngForm">
+                    <button type="button" routerLink="/farms/{{farmCode}}" class="btn btn-danger clickable gutter-1">Cancel</button>
+                    <button type="submit" class="btn btn-success clickable gutter-1" [disabled]="!farmEditForm.valid">Save</button>
+                    <div class="form-group">
+                        <strong>Code:</strong>
+                        <input class="form-control" id="code" name="code" [(ngModel)]="editFarm.Code" required #code="ngModel">
+                        <div class="form-field-warning" [hidden]="code.valid || code.pristine">required</div>
+                    </div>
+                    <div class="form-group">
+                        <strong>Name:</strong>
+                        <input class="form-control" id="name" name="name" [(ngModel)]="editFarm.Name" required #name="ngModel">
+                        <div class="form-field-warning" [hidden]="name.valid || name.pristine">required</div>
+                    </div>
+                    <div class="form-group">
+                        <strong>Type:</strong>
+                        <select class="form-control" [(ngModel)]="editFarm.FarmType" id="farm-type" name="farm-type" required #type="ngModel">
+                            <option *ngFor="let type of editFarm.farmTypes" [ngValue]="type">{{type}}</option>
+                        </select>
+                        <div class="form-field-warning" [hidden]="type.valid || type.pristine">required</div>
+                    </div>
+                    <div class="form-group">
+                        <strong>Harvested:</strong>
+                        <input class="form-control" id="harvested" name="harvested" [(ngModel)]="editFarm.DateTimeHarvested">
+                    </div>
+                    <div class="form-group">
+                        <strong>Miller:</strong>
+                        <select class="form-control" [(ngModel)]="editFarm.Miller" id="miller" name="miller" required #miller="ngModel">
+                            <option *ngFor="let miller of millerList" [ngValue]="miller">{{miller.Name}}</option>
+                        </select>
+                        <div class="form-field-warning" [hidden]="miller.valid || miller.pristine">required</div>
+                    </div>
+                </form>
             </div>
             <div class="col-md-12">
                 <strong>Paddocks:</strong>
@@ -51,9 +59,9 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input class="form-control" placeholder="Code..." [(ngModel)]="newCode" id="new-paddock-code"></td>
-                            <td><input class="form-control" type="number" min="1" placeholder="Area..." [(ngModel)]="newArea"  id="new-paddock-area"></td>
-                            <td><button class="btn btn-default clickable fill-width" (click)="addPaddock(newCode, newArea)">Add New</button></td>
+                            <td><input class="form-control" placeholder="Code..." [(ngModel)]="newPaddock.Code" id="new-paddock-code"></td>
+                            <td><input class="form-control" type="number" min="1" placeholder="Area..." [(ngModel)]="newPaddock.Area"  id="new-paddock-area"></td>
+                            <td><button class="btn btn-default clickable fill-width" (click)="addPaddock()">Add New</button></td>
                         </tr>
                         <tr *ngFor="let paddock of paddockList; let i = index">
                             <td><input class="form-control" [(ngModel)]="paddock.Code"></td>

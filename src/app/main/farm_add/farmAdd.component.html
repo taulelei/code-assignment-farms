@@ -1,0 +1,79 @@
+<div class="row">
+        <div class="col-sm-12">
+            <h2>Farm Add</h2>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <!-- <div class="col-sm-2 gutter-1">
+            <button routerLink="/" class="btn btn-danger clickable fill-width">Cancel</button>
+        </div>
+        <div class="col-sm-2 gutter-1">
+            <button (click)="addFarm()" class="btn btn-success clickable fill-width" [disabled]="!newFarm.isValid()">Save</button>
+        </div> -->
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-md-6">
+                    <form (ngSubmit)="addFarm(farmAddForm)" (ngForm)="farmAddForm" #farmAddForm="ngForm">
+                        <button type="button" routerLink="/" class="btn btn-danger clickable gutter-1">Cancel</button>
+                        <button type="submit" class="btn btn-success clickable gutter-1" [disabled]="!farmAddForm.valid">Save</button>
+                        <div class="form-group">
+                            <strong>Code:</strong>
+                            <input class="form-control" id="code" name="code" [(ngModel)]="newFarm.Code" required #code="ngModel">
+                            <div class="form-field-warning" [hidden]="code.valid || code.untouched">required</div>
+                        </div>
+                        <div class="form-group">
+                            <strong>Name:</strong>
+                            <input class="form-control" id="name" name="name" [(ngModel)]="newFarm.Name" required #name="ngModel">
+                            <div class="form-field-warning" [hidden]="name.valid || name.untouched">required</div>
+                        </div>
+                        <div class="form-group">
+                            <strong>Type:</strong>
+                            <select class="form-control" [(ngModel)]="newFarm.FarmType" id="farm-type" name="farm-type" required #type="ngModel">
+                                <option *ngFor="let type of newFarm.farmTypes" [ngValue]="type">{{type}}</option>
+                                <div class="form-field-warning" [hidden]="type.valid || type.untouched">required</div>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <strong>Harvested:</strong>
+                            <input class="form-control" id="harvested" name="harvested" [(ngModel)]="newFarm.DateTimeHarvested">
+                        </div>
+                        <div class="form-group">
+                            <strong>Miller:</strong>
+                            <select class="form-control" [(ngModel)]="newFarm.Miller" id="miller" name="miller" required #miller="ngModel">
+                                <option value="" selected>Miller name...</option>
+                                <option *ngFor="let miller of millerList" [ngValue]="miller">{{miller.Name}}</option>
+                            </select>
+                            <div class="form-field-warning" [hidden]="miller.valid || miller.untouched">required</div>
+                        </div>
+                    </form>
+                    
+                </div>
+                <div class="col-md-12">
+                    <strong>Paddocks:</strong>
+                    <table class="table table-sm">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Code</th>
+                                <th>Area</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input class="form-control" placeholder="Code..." [(ngModel)]="newPaddock.Code" id="new-paddock-code" required></td>
+                                <td><input class="form-control" type="number" min="1" placeholder="Area..." [(ngModel)]="newPaddock.Area"  id="new-paddock-area" required></td>
+                                <td><button class="btn btn-default clickable fill-width" (click)="addPaddock()">Add New</button></td>
+                            </tr>
+                            <tr *ngFor="let paddock of newFarm.Paddocks; let i = index">
+                                <td><input class="form-control" [(ngModel)]="paddock.Code"></td>
+                                <td><input class="form-control" type="number" min="1" [(ngModel)]="paddock.Area"></td>
+                                <td><button class="btn btn-danger clickable fill-width" (click)="removePaddock(paddock)">Remove</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+                
+        </div>
+    </div>
