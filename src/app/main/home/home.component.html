@@ -47,7 +47,7 @@
                     <td>{{farm.Name}}</td>
                     <td>{{farm.FarmType}}</td>
                     <td class="as-link" (click)="viewMillerDetails(farm.Miller)"><span >{{farm.Miller.Name}}</span></td>
-                    <td class="as-warning-link" (click)="removeFarm(farm)"><span >Delete</span></td>
+                    <td class="as-warning-link" ><span (click)="removeFarm(farm)" style="padding: 1em;">Delete</span></td>
                 </tr>
             </tbody>
         </table>

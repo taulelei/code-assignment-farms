@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
         // this.tablePagination.data = this.farmList;
         this.dataService.getAllFarms().then((response) => {
             this.farmList = response;
-            this.tablePagination.data = response;
+            this.tablePagination.data = this.farmList;
         });
 
         this.dataService.getAllMillers().then((response) => {
@@ -56,6 +56,7 @@ export class HomeComponent implements OnInit {
     removeFarm(farm){
         this.dataService.removeFarm(farm).then((response) => {
             this.farmList = response;
+            this.tablePagination.data = this.farmList.filter(x => x.Name.includes(this.filter.farm) && x.Miller.Name.includes(this.filter.miller));
         });
     }
 
