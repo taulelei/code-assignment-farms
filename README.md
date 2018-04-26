@@ -1,27 +1,20 @@
-# AgtrixApp
+# FarmViewerApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
 
-## Development server
+# Instructions
+To run the application locally: 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+1. Download the APP folder (production build) 
+2. Open index.html in the browser
 
-## Code scaffolding
+Alternatively, if any issues are encountered, a dev build of the app can be served by performing the following steps: 
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+1.	Ensure NodeJS is installed on the local machine 
+2.	Clone the repository from the 'Hosted repository' GitHub link provided above 
+3.	Open CLI and change to project directory 
+4.	Run command: npm install
+5.	Run command: ng serve --open 
 
-## Build
+A browser window should now open to http://localhost:4200/ with the application running. 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
