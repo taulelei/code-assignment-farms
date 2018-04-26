@@ -35,7 +35,8 @@ export class DataService implements IDataService{
     }
 
     addFarm(farm: Farm){
-        this.farms.push(farm)
+        this.millers.find(x => x.Id === farm.Miller.Id).Farms.push(farm);
+        this.farms.unshift(farm);
         return new Promise<number>((resolve, reject) => {
             resolve(this.farms.indexOf(farm));
         });
